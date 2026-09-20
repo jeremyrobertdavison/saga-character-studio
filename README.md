@@ -1,6 +1,6 @@
 # SAGA Character Studio
 
-Version 0.1.0 — first playtest release for Foundry VTT 13 and Simple Worldbuilding 0.8.2.
+Version 0.1.1 — first playtest release for Foundry VTT 13 and Simple Worldbuilding 0.8.2.
 
 A guided SAGA character creator and Play Mode inside Foundry. Created for SAGA, a tabletop roleplaying game by Jeremy Davison. No Gemini account, API key, Google AI Studio deployment, or separate web server is required.
 
@@ -42,6 +42,10 @@ game.modules.get("saga-character-studio").api.open();
 - Play Mode with Foundry chat rolls, Heroism and conditions.
 - Versioned character build data and reviewed migration of legacy formula-only Actors.
 - Bundled interface assets with selectable themes and browser read-aloud.
+
+## Edit from a character sheet
+
+Owners and GMs can click **Edit in SAGA** in a character sheet’s header. Studio opens with that world Actor selected and its character details ready to edit. Save to Foundry updates the same Actor. If its editor is already open, the button brings it forward without replacing unsaved edits. Different characters open in separate windows. Legacy characters still require their original build choices. Unlinked scene-token sheets open the corresponding world Actor; a notification explains this distinction.
 
 ## Create and edit
 

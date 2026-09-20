@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.1
+
+- Add owner/GM-only Edit in SAGA character-sheet header button.
+- Open the selected character directly in the details editor.
+- Reuse an existing editor for that Actor without discarding unsaved changes.
+- Keep editors for different Actors separate.
+
+
 ## 0.1.0
 
 - Port the SAGA guided creator into an isolated Foundry ApplicationV2 window.

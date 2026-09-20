@@ -392,6 +392,16 @@ const App: React.FC = () => {
       else setStep('home');
     } catch(e){fail(e);}
   };
+  useEffect(()=>{
+    const id=host?.initial?.(sessionKey);
+    if(!id)return;
+    try{
+      const result=host.load(sessionKey,id);
+      setActorChoice(id);setActorLabel(result.name);setLegacyInfo(result.legacy);
+      if(result.character){handleLoadFromRecent(result.character);setStep('details');}
+      else setStep('home');
+    }catch(e){fail(e);}
+  },[]);
   const saveActor = async () => {
     if(saving)return;
     setSaving(true);
@@ -1482,7 +1492,7 @@ const App: React.FC = () => {
         <div className="flex justify-between items-center mb-10">
           <div className="w-full flex flex-col items-center gap-2">
             <h1 className="text-2xl font-black text-sky-400 font-orbitron tracking-tighter uppercase text-center leading-tight">Saga Creator</h1>
-            <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest bg-slate-900 px-2 py-0.5 rounded-full border border-slate-700">Foundry module · 0.1.0</div>
+            <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest bg-slate-900 px-2 py-0.5 rounded-full border border-slate-700">Foundry module · 0.1.1</div>
           </div>
           <button onClick={() => setIsMobileMenuOpen(false)} className="lg:hidden text-slate-400 hover:text-white p-2"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>

@@ -2,7 +2,7 @@
   "id": "saga-character-studio",
   "title": "SAGA Character Studio",
   "description": "Guided SAGA character creation, editing, import/export, and Play Mode for Simple Worldbuilding.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "authors": [
     {
       "name": "Jeremy Davison"
@@ -32,5 +32,5 @@
   ],
   "url": "https://github.com/jeremyrobertdavison/saga-character-studio",
   "manifest": "https://github.com/jeremyrobertdavison/saga-character-studio/releases/latest/download/module.json",
-  "download": "https://github.com/jeremyrobertdavison/saga-character-studio/releases/download/v0.1.0/saga-character-studio-v0.1.0.zip"
+  "download": "https://github.com/jeremyrobertdavison/saga-character-studio/releases/download/v0.1.1/saga-character-studio-v0.1.1.zip"
 }

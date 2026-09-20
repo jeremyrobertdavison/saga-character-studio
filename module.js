@@ -13,7 +13,15 @@ class SagaWindow extends foundry.applications.api.ApplicationV2 {
 }
 let app;
 const api={
- open(){if(game.system.id!=='worldbuilding')return ui.notifications.error('SAGA Studio requires Simple Worldbuilding.');if(app?.rendered){app.bringToFront();return;}app=new SagaWindow();app.key=foundry.utils.randomID();sessions.set(app.key,{actorId:null,base:null});app.render(true);},
+ open(actorId=null){
+  if(game.system.id!=='worldbuilding')return ui.notifications.error('SAGA Studio requires Simple Worldbuilding.');
+  if(actorId){try{owned(actorId);}catch(e){return ui.notifications.error(e.message);}
+   for(const state of sessions.values())if(state.actorId===actorId&&state.window?.rendered){state.window.bringToFront();return;}
+  }else if(app?.rendered){app.bringToFront();return;}
+  const key=foundry.utils.randomID();const window=new SagaWindow({id:`saga-studio-${key}`});window.key=key;
+  sessions.set(key,{actorId:null,base:null,initialActor:actorId,window});if(!actorId)app=window;window.render(true);
+ },
+ initial(key){return getSession(key).initialActor||null;},
  list(){return game.actors.contents.filter(a=>a.type==='character'&&a.isOwner).map(a=>({id:a.id,name:a.name,managed:!!a.getFlag(ID,'build')}));},
  load(key,id){const s=getSession(key);const a=owned(id);s.actorId=id;s.base=stamp(a);const build=a.getFlag(ID,'build');if(build?.schemaVersion>1)throw Error('This character was saved by a newer SAGA Studio version. Update the module before editing.');return {character:build?copy(build.character):null,legacy:build?null:legacy(a),name:a.name};},
  reset(key){const s=getSession(key);s.actorId=null;s.base=null;},
@@ -50,3 +58,15 @@ Hooks.once('ready',()=>{game.modules.get(ID).api=api;});
 function button(_app,html){if(game.system.id!=='worldbuilding')return;const el=html instanceof HTMLElement?html:html?.[0];if(!el||el.querySelector('.saga-launch'))return;const target=el.querySelector('.directory-header')||el;const b=document.createElement('button');b.type='button';b.className='saga-launch';b.textContent='SAGA Character Studio';b.onclick=()=>api.open();target.append(b);}
 Hooks.on('renderActorDirectory',button);
 Hooks.on('getSceneControlButtons',controls=>{if(game.system.id!=='worldbuilding')return;const tokens=controls.tokens;if(tokens?.tools)tokens.tools.sagaStudio={name:'sagaStudio',title:'SAGA Character Studio',icon:'fa-solid fa-hat-wizard',button:true,onChange:()=>api.open()};});
+
+// Simple Worldbuilding 0.8.2 uses the classic ActorSheet header hooks on Foundry 13.
+Hooks.on('getActorSheetHeaderButtons',(sheet,buttons)=>{
+ if(game.system.id!=='worldbuilding')return;
+ const actor=sheet.actor;const worldActor=actor&&game.actors.get(actor.id);
+ if(!worldActor?.isOwner||worldActor.type!=='character')return;
+ if(buttons.some(b=>b.class==='saga-edit-character'))return;
+ buttons.unshift({label:'Edit in SAGA',class:'saga-edit-character',icon:'fas fa-hat-wizard',onclick:()=>{
+  if(actor.isToken)ui.notifications.info('Opening the world character. Unlinked scene-token data is not edited by SAGA Studio.');
+  api.open(worldActor.id);
+ }});
+});
